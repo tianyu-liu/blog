@@ -207,15 +207,29 @@
     width: 100%;
     border-collapse: collapse;
     @include overflow(auto);
+    font-size: map-get($base, font-size-sm);
+    font-family: map-get($base, font-family-code);
     thead, tfoot {
       background-color: $text-background-color;
     }
     th, td {
-      padding: map-get($spacers, 2);
+      padding: 0 map-get($spacers, 2);
       border: 1px solid $border-color-l;
     }
     th {
       font-weight: map-get($base, font-weight-bold);
     }
+  }
+  table.dataTable.compact thead th,
+  table.dataTable.compact thead td {
+    padding: 0 map-get($spacers, 2);
+  }
+  table.dataTable.compact tfoot th,
+  table.dataTable.compact tfoot td {
+    padding: 0 map-get($spacers, 1);
+  }
+  table.dataTable.compact tbody th,
+  table.dataTable.compact tbody td {
+    padding: 0 map-get($spacers, 1);
   }
 }

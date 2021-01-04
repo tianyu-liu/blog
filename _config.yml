@@ -179,6 +179,11 @@ analytics:
 ## => Build
 ##############################
 markdown    : kramdown
+kramdown:
+  smart_quotes: ["apos", "apos", "quot", "quot"]
+  syntax_highlighter_opts:
+    block:
+      line_numbers: true
 highlighter : rouge
 permalink   : date
 

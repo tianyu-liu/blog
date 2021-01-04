@@ -19,17 +19,21 @@ html,
   }
 }
 
+aside {
+  border: 1px;
+  border-style: solid;
+  border-radius: 5px;
+  background-color: $background-color;
+  position: fixed;
+  right:2px;
+  width: map-get($spacers, 5)-.5rem;
+  z-index:1000;
+  @include overflow(hidden);
+}
+
 .page__main {
   height: 100%;
   color: $text-color;
-  .col-aside {
-    display: none;
-    & > aside {
-      position: absolute;
-      width: map-get($layout, aside-width);
-      @include overflow(hidden);
-    }
-  }
 }
 
 .page__main-inner {
@@ -60,7 +64,7 @@ html,
 
 .page__aside {
   .toc-aside {
-    padding: map-get($spacers, 5) 0 map-get($spacers, 3) map-get($spacers, 5);
+    padding: map-get($spacers, 2) 0 map-get($spacers, 2) map-get($spacers, 2);
   }
 }
 
@@ -104,19 +108,8 @@ html,
 }
 
 .has-aside {
-  .col-aside {
-    position: relative;
-    display: block;
-    width: map-get($layout, aside-width);
-    & > aside {
-      &.fixed {
-        position: fixed;
-        -webkit-font-smoothing: subpixel-antialiased;
-      }
-    }
-    @include media-breakpoint-down(lg) {
-      display: none;
-    }
+  aside {
+    -webkit-font-smoothing: subpixel-antialiased;
   }
 }
 

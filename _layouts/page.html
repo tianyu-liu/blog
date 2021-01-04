@@ -179,17 +179,16 @@ layout: base
 
 
         {%- if _full_width == false -%}
+
+          {%- if page.aside -%}
+            <aside class="page__aside js-page-aside" onmouseover="openAside()" onmouseout="closeAside()">
+              {%- include aside/toc.html -%}
+            </aside>
+          {%- endif -%}
+
           <div class ="main">
         {%- endif -%}
             <div class="grid grid--reverse">
-
-              <div class="col-aside d-print-none js-col-aside">
-                {%- if page.aside -%}
-                  <aside class="page__aside js-page-aside">
-                    {%- include aside/toc.html -%}
-                  </aside>
-                {%- endif -%}
-              </div>
 
               <div class="col-main cell cell--auto">
                 {%- include main/top/custom.html -%}
@@ -263,6 +262,17 @@ layout: base
   /* toc must before affix, since affix need to konw toc' height. */
   {%- if page.aside.toc -%}{%- include scripts/aside/toc.js -%}{%- endif -%}
   {%- include scripts/aside/affix.js -%}
+</script>
+<script>
+  var aside_width;
+  function openAside() {
+    aside = document.getElementsByTagName("aside")[0]
+    aside_width = aside.style.width;
+    aside.style.width = "220px";
+  }
+  function closeAside() {
+    document.getElementsByTagName("aside")[0].style.width = aside_width;
+  }
 </script>
 {%- endif -%}
 

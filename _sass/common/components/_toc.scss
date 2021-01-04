@@ -4,7 +4,7 @@ ul.toc {
   color: $text-color;
   list-style-type: none;
   & > li {
-    margin: map-get($spacers, 1) / 2 0;
+    // margin: map-get($spacers, 1) / 2 0;
     a {
       display: inline-block;
       margin: map-get($spacers, 1) / 4 0;
@@ -40,8 +40,8 @@ ul.toc {
   }
   .toc-h1 {
     @include split-line(bottom);
-    padding: map-get($spacers, 2) 0 map-get($spacers, 1) 0;
-    margin-bottom: map-get($spacers, 2);
+    padding: map-get($spacers, 1) 0 0 0;
+    // margin-bottom: map-get($spacers, 2);
     color: $text-color-d;
     &, a {
       font-size: map-get($base, font-size-sm);

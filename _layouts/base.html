@@ -7,19 +7,43 @@ layout: none
   <head>
     <script src="/DataTables/jquery-3.5.1.min.js"></script>
     <script type="text/javascript" charset="utf8" src="/DataTables/jquery.dataTables.min.js"></script>
+    <script src="/DataTables/natural.js"></script>
     <link rel="stylesheet" type="text/css" href="/DataTables/jquery.dataTables.min.css">
     <script>
       jQuery(document).ready(function($){
-        $('div.datatable-begin').nextUntil('div.datatable-end', 'table').addClass('display compact');
+        $('div.ttmd').each(function(i, obj) {
+          var t = obj.innerHTML;
+          t = t.replace(/\\r\//g,'<span style="color:red">');
+          t = t.replace(/\\g\//g,'<span style="color:green">');
+          t = t.replace(/\\b\//g,'<span style="color:blue">');
+          t = t.replace(/\\m\//g,'<span style="color:magenta">');
+          t = t.replace(/\\c\//g,'<span style="color:cyan">');
+          t = t.replace(/\\y\//g,'<span style="color:yellow">');
+          t = t.replace(/\\R\//g,'<span style="background-color:red">');
+          t = t.replace(/\\G\//g,'<span style="background-color:green">');
+          t = t.replace(/\\B\//g,'<span style="background-color:blue">');
+          t = t.replace(/\\M\//g,'<span style="background-color:magenta">');
+          t = t.replace(/\\C\//g,'<span style="background-color:cyan">');
+          t = t.replace(/\\Y\//g,'<span style="background-color:yellow">');
+          t = t.replace(/\\\//g,'</span>');
+          obj.innerHTML = t;
+        });
+        $('div.dataTable').children('table').addClass('display compact');
         $('table.display').DataTable( {
             paging: false,
             stateSave: false,
             searching: false,
             order: [],
-            info: false
+            info: false,
+            columnDefs: [{type: "natural", targets: "_all"},{}] 
         });
       });
     </script>
+    <style type="text/css">
+    table.dataTable td {
+      padding: 0;
+    }
+    </style>
     {%- include analytics.html -%}
     {%- include head.html -%}
     <script>

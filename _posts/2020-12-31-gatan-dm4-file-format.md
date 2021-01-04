@@ -8,9 +8,6 @@ tags:
 pre {
     tab-size: 8;
 }
-table.dataTable td {
-  padding: 0;
-}
 </style>
 
 Digital Micrograph version: 3.42.3048.0.
@@ -41,7 +38,7 @@ This outputs the following list, which should include all possible values in `Im
 1. `variant`: differentiates similar **Image Data Types** while other specifications are identical, according to *DM*'s F1 Help Manual;
 1. `scalar_bit_size`: the **Bit Size** of the individual numbers.
 
-<div class="datatable-begin"></div>
+<div markdown="1" class="dataTable">
 
 image_data_type | data_class | scalar_class | variant | scalar_bit_size
 ---|---|---|---|---|
@@ -85,9 +82,9 @@ image_data_type | data_class | scalar_class | variant | scalar_bit_size
 39 | scalar | sint | 0 |  64
 40 | scalar | uint | 0 |  64
 
-<div class="datatable-end"></div>
+</div>
 
-For **RGB(A) Images**, I can image there could be `RGB`/`BGA` ordering **variants**. **Type 5** **Complex Image** is recorded [[1]] as a **Packed Complex** type, which should have about half the size of a regular **Complex Image**, for using symmetric "dummy" expressions for FFT results of **Real Images**. It seems certain similar **Image Data Types** have identical **variant** as well as other specifications. Also **Type 4** is indeed non-existent. 
+For **RGB(A) Images**, I can image there could be `RGB`/`BGA` ordering **variants**. **Type 5** **Complex Image** is known [\1] as a **Packed Complex** type, which should have about half of the size of a regular **Complex Image**. It seems certain similar **Image Data Types** have identical **variant** as well as other specifications. Also **Type 4** is indeed non-existent. 
 
 ## Usual **Image Data Types**
 
@@ -145,7 +142,7 @@ This script will create and ask to save a multi-**Image** `ImageDocument`. Pleas
 
 The **Image Data Type** information reported by *DM* will be:
 
-<div class="datatable-begin"></div>
+<div markdown="1" class="dataTable ttmd">
 
 #| Type | Pixel | Numeric | Variant | Bit | Image Name
 ---|---|---|---|---|---|---
@@ -168,11 +165,158 @@ The **Image Data Type** information reported by *DM* will be:
 16 | 17 | rgb | uint | 0 | 16 | RGBImage("",6,1,16)
 17 | 24 | rgba | uint | 0 | 16 | RGBImage("",8,1,17)
 
-<div class="datatable-end"></div>
+</div>
 
 Because this is being reported before saving the **Image Document**, there will be no thumbnail yet. Upon saving, a thumbnail will be generated (and named `Image Of RGBImage("",8,1,17)` in this case).
 
-The `ConvertToPackedComplex()` seemed cannot actually create **Packed Complex Images** here. I also tried `RealFFT()`, but no luck either.
+**Packed Complex Images** seem to be uncapturable here, as *DM* F1 Help says "... this data type can't be used with image expressions ...".
+
+# Tag/Variable Data Types
+
+``` c++
+taggroup tg=newtaggroup()
+result("\n")
+
+image r4 := RealImage("RealImage(\"\",4,1,1);ConvertToPackedComplex",4,1,1)
+image r8 := RealImage("RealImage(\"\",8,1,2);ConvertToPackedComplex",8,1,2)
+ConvertToPackedComplex(r4)
+ConvertToPackedComplex(r8)
+tg.TagGroupSetTagAsArray("Array=RealImage(\"\",4,1,1);ConvertToPackedComplex",r4)
+tg.TagGroupSetTagAsArray("Array=RealImage(\"\",8,1,1);ConvertToPackedComplex",r8)
+tg.TagGroupSetTagAsArray("Array=BinaryImage(\"\",1,3)",BinaryImage("",1,3))
+tg.TagGroupSetTagAsArray("Array=IntegerImage(\"\",1,0,1,4)",IntegerImage("",1,0,1,4))
+tg.TagGroupSetTagAsArray("Array=IntegerImage(\"\",1,1,1,5)",IntegerImage("",1,1,1,5))
+tg.TagGroupSetTagAsArray("Array=IntegerImage(\"\",4,0,1,6)",IntegerImage("",4,0,1,6))
+tg.TagGroupSetTagAsArray("Array=IntegerImage(\"\",4,1,1,7)",IntegerImage("",4,1,1,7))
+tg.TagGroupSetTagAsArray("Array=IntegerImage(\"\",8,0,1,8)",IntegerImage("",8,0,1,8))
+tg.TagGroupSetTagAsArray("Array=IntegerImage(\"\",8,1,1,9)",IntegerImage("",8,1,1,9))
+tg.TagGroupSetTagAsArray("Array=RealFFT(RealImage(\"\",4,1,10))",RealFFT(RealImage("",4,1,10)))
+tg.TagGroupSetTagAsArray("Array=RealImage(\"\",4,1,10)",RealImage("",4,1,10))
+tg.TagGroupSetTagAsArray("Array=RealImage(\"\",8,1,11)",RealImage("",8,1,11))
+tg.TagGroupSetTagAsArray("Array=ComplexImage(\"\",8,1,12)",ComplexImage("",8,1,12))
+tg.TagGroupSetTagAsArray("Array=ComplexImage(\"\",16,1,13)",ComplexImage("",16,1,13))
+tg.TagGroupSetTagAsArray("Array=RGBImage(\"\",3,1,14)",RGBImage("",3,1,14))
+tg.TagGroupSetTagAsArray("Array=RGBImage(\"\",4,1,15)",RGBImage("",4,1,15))
+tg.TagGroupSetTagAsArray("Array=RGBImage(\"\",6,1,16)",RGBImage("",6,1,16))
+tg.TagGroupSetTagAsArray("Array=RGBImage(\"\",8,1,17)",RGBImage("",8,1,17))
+tg.TagGroupSetTagAsBoolean("Boolean=1",1)
+tg.TagGroupSetTagAsDouble("Double=23456789012345678901",23456789012345678901)
+tg.TagGroupSetTagAsDoubleComplex("DoubleComplex=complex(23456789012345678901,34567890123456789012)",complex(23456789012345678901,34567890123456789012))
+tg.TagGroupSetTagAsEightBitColor("EightBitColor=rgba(255,254,253,252)",rgba(255,254,253,252))
+tg.TagGroupSetTagAsFloat("Float=23456789012345678901",23456789012345678901)
+//tg.TagGroupSetTagAsFloatComplex("FloatComplex=",ComplexNumber c )
+//tg.TagGroupSetTagAsFloatPoint("FloatPoint=",Number x,Number y )
+//tg.TagGroupSetTagAsFloatRect("FloatRect=",Number t,Number l,Number b,Number r )
+tg.TagGroupSetTagAsLong("Long=-2147483647",-2147483647)
+//tg.TagGroupSetTagAsLongPoint("LongPoint=",Number x,Number y )
+//tg.TagGroupSetTagAsLongRect("LongRect=",Number t,Number l,Number b,Number r )
+tg.TagGroupSetTagAsNumber("Number=rgba(255,254,253,252)",rgba(255,254,253,252))
+tg.TagGroupSetTagAsNumber("Number=complex(23456789012345678901,34567890123456789012)",complex(23456789012345678901,34567890123456789012))
+tg.TagGroupSetTagAsNumber("Number=23456789012345678901",23456789012345678901)
+tg.TagGroupSetTagAsNumber("Number=0",0)
+tg.TagGroupSetTagAsRGBUInt16("RGBUInt16=65535,65534,65533",65535,65534,65533)
+tg.TagGroupSetTagAsShort("Short=-32768",-32768)
+tg.TagGroupSetTagAsShortPoint("ShortPoint=-32768,32768",-32768,32768)
+tg.TagGroupSetTagAsShortRect("ShortRect=-32768,32768,-32767,32767",-32768,32768,-32767,32767)
+tg.TagGroupSetTagAsSInt64("SInt64=-9223372036854775807",-9223372036854775807)
+tg.TagGroupSetTagAsString("String=\"S\"","S")
+tg.TagGroupSetTagAsTagGroup("TagGroup=newtaggroup()",newtaggroup())
+tg.TagGroupSetTagAsText("Text=\"T\"","T")
+tg.TagGroupSetTagAsUInt16("UInt16=65535",65535)
+tg.TagGroupSetTagAsUInt32("UInt32=4294967295",4294967295)
+tg.TagGroupSetTagAsUInt64("UInt64=18446744073709551615",18446744073709551615)
+tg.TagGroupSetTagRGBBitmap("RGBBitmap=RGBImage(\"\",3,1,14)",RGBImage("",3,1,14))
+
+tg.taggroupopenbrowserwindow(1)
+
+number i,j,c
+
+for(i=0;i<tg.taggroupcounttags();i++){
+	c=tg.TagGroupGetTagTypeLength(i)
+	for(j=0;j<c;j++)
+		result(tg.taggroupgettagtype(i,j)+"\t")
+	for(j=0;j<13-c;j++)
+		result("\t")
+	string l=tg.taggroupgettaglabel(i)
+	result(l+"\t")
+	
+	number n0=0,n1=0,n2=0,n3=0
+	complexnumber nc=0
+	rgbnumber nr=0
+	string s=""
+	taggroup t
+	
+	if (l=="Boolean=1") {tg.taggroupgettagasboolean(l,n0); result(format(n0,"%.20g"));}
+	if (l=="Double=23456789012345678901") {tg.TagGroupGetTagAsDouble(l,n0); result(format(n0,"%.20g"));}
+	if (l=="DoubleComplex=complex(23456789012345678901,34567890123456789012)") {tg.TagGroupGetTagAsDoubleComplex(l,nc); result(format(real(nc),"%.20g,")+format(imaginary(nc),"%.20g"));}
+	if (l=="EightBitColor=rgba(255,254,253,252)") {tg.TagGroupGetTagAsEightBitColor(l,nr); result(nr);}
+	if (l=="Float=23456789012345678901") {tg.TagGroupGetTagAsfloat(l,n0); result(format(n0,"%.20g"));}
+	if (l=="Long=-2147483647") {tg.TagGroupGetTagAslong(l,n0); result(format(n0,"%.20g"));}
+	if (l=="Number=rgba(255,254,253,252)") {tg.TagGroupGetTagAsnumber(l,nr); result(nr);}
+	if (l=="Number=complex(23456789012345678901,34567890123456789012)") {tg.TagGroupGetTagAsnumber(l,nc); result(format(real(nc),"%.20g,")+format(imaginary(nc),"%.20g"));}
+	if (l=="Number=23456789012345678901") {tg.TagGroupGetTagAsnumber(l,n0); result(format(n0,"%.20g"));}
+	if (l=="Number=0") {tg.TagGroupGetTagAsnumber(l,n0); result(format(n0,"%.20g"));}
+	if (l=="RGBUInt16=65535,65534,65533") {tg.TagGroupGetTagAsRGBUInt16(l,n0,n1,n2); result(n0+","+n1+","+n2);}
+	if (l=="Short=-32768") {tg.TagGroupGetTagAsshort(l,n0); result(format(n0,"%.20g"));}
+	if (l=="ShortPoint=-32768,32768") {tg.TagGroupGetTagAsshortpoint(l,n0,n1); result(n0+","+n1);}
+	if (l=="ShortRect=-32768,32768,-32767,32767") {tg.TagGroupGetTagAsshortrect(l,n0,n1,n2,n3); result(n0+","+n1+","+n2+","+n3);}
+	if (l=="SInt64=-9223372036854775807") {tg.TagGroupGetTagAssint64(l,n0); result(format(n0,"%.20g"));}
+	if (l=="String=\"S\"") {tg.TagGroupGetTagAsstring(l,s); result(s);}
+//	if (l=="TagGroup=newtaggroup()") {tg.TagGroupGetTagAstaggroup(l,t); ;}
+	if (l=="Text=\"T\"") {tg.TagGroupGetTagAstext(l,s); result(s);}
+	if (l=="UInt16=65535") {tg.TagGroupGetTagAsuint16(l,n0); result(format(n0,"%.20g"));}
+	if (l=="UInt32=4294967295") {tg.TagGroupGetTagAsuint32(l,n0); result(format(n0,"%.20g"));}
+	if (l=="UInt64=18446744073709551615") {tg.TagGroupGetTagAsuint64(l,n0); result(format(n0,"%.20g"));}
+	
+	result("\n")
+}
+```
+
+<div markdown="1" class="dataTable ttmd">
+ #| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | A | B | C | Tag Label | `TagGroupGetTagAs`___() |
+---|---|
+0 | \b/20\/ | \r/8\/ | \b/*3*\/ |  |  |  |  |  |  |  |  |  |  | Array=BinaryImage("",1,3) | 
+1 | \b/20\/ |\g/15\/| 0 | \g/*2*\/ | 0 | \r/7\/ | 0 | \r/7\/ | \b/*13*\/ |  |  |  |  | Array=ComplexImage("",16,1,13) | 
+2 | \b/20\/ |\g/15\/| 0 | \g/*2*\/ | 0 | \r/6\/ | 0 | \r/6\/ | \b/*12*\/ |  |  |  |  | Array=ComplexImage("",8,1,12) | 
+3 | \b/20\/ | \r/10\/ | \b/*4*\/|  |  |  |  |  |  |  |  |  |  | Array=IntegerImage("",1,0,1,4) | 
+4 | \b/20\/ | \r/9\/ | \b/*5*\/|  |  |  |  |  |  |  |  |  |  | Array=IntegerImage("",1,1,1,5) | 
+5 | \b/20\/ | \r/5\/ | \b/*6*\/|  |  |  |  |  |  |  |  |  |  | Array=IntegerImage("",4,0,1,6) | 
+6 | \b/20\/ | \r/3\/ | \b/*7*\/|  |  |  |  |  |  |  |  |  |  | Array=IntegerImage("",4,1,1,7) | 
+7 | \b/20\/ | \r/12\/ | \b/*8*\/|  |  |  |  |  |  |  |  |  |  | Array=IntegerImage("",8,0,1,8) | 
+8 | \b/20\/ | \r/11\/ | \b/*9*\/|  |  |  |  |  |  |  |  |  |  | Array=IntegerImage("",8,1,1,9) | 
+9 | \b/20\/ |\g/15\/| 0 | \g/*2*\/ | 0 | \r/6\/ | 0 | \r/6\/ | \b/*10*\/ |  |  |  |  | Array=RealFFT(RealImage("",4,1,10)) | 
+10 | \b/20\/ |\g/15\/| 0 | \g/*2*\/ | 0 | \r/6\/ | 0 | \r/6\/ | \b/*1*\/|  |  |  |  | Array=RealImage("",4,1,1);ConvertToPackedComplex | 
+11 | \b/20\/ | \r/6\/ | \b/*10*\/ |  |  |  |  |  |  |  |  |  |  | Array=RealImage("",4,1,10) | 
+12 | \b/20\/ |\g/15\/| 0 | \g/*2*\/ | 0 | \r/7\/ | 0 | \r/7\/ | \b/*2*\/|  |  |  |  | Array=RealImage("",8,1,1);ConvertToPackedComplex | 
+13 | \b/20\/ | \r/7\/ | \b/*11*\/ |  |  |  |  |  |  |  |  |  |  | Array=RealImage("",8,1,11) | 
+14 | \b/20\/ |\g/15\/| 3 | \g/*3*\/ | 0 | \r/10\/ | 1 | \r/10\/ | 2 | \r/10\/ | \b/*14*\/ |  |  | Array=RGBImage("",3,1,14) | 
+15 | \b/20\/ | \r/3\/ |\b/*15*\/|  |  |  |  |  |  |  |  |  |  | Array=RGBImage("",4,1,15) | 
+16 | \b/20\/ |\g/15\/| 3 | \g/*3*\/ | 0 | \r/4\/ | 1 | \r/4\/ | 2 | \r/4\/ | \b/*16*\/ |  |  | Array=RGBImage("",6,1,16) | 
+17 | \b/20\/ |\g/15\/| 4 | \g/*4*\/ | 0 | \r/4\/ | 1 | \r/4\/ | 2 | \r/4\/ | 3 | \r/4\/ | \b/*17*\/ | Array=RGBImage("",8,1,17) | 
+18 | \r/8\/ |  |  |  |  |  |  |  |  |  |  |  |  | Boolean=1 | 1
+19 | \r/7\/ |  |  |  |  |  |  |  |  |  |  |  |  | Double=\Y/234567890123456\/78901 | \Y/234567890123456\/79872
+20 |\g/15\/| 0 | \g/*2*\/ | 0 | \r/7\/ | 0 | \r/7\/ |  |  |  |  |  |  | DoubleComplex=complex(\Y/234567890123456\/78901,\Y/345678901234567\/89012) | \Y/234567890123456\/79872,\Y/345678901234567\/90528
+21 | \r/3\/ |  |  |  |  |  |  |  |  |  |  |  |  | EightBitColor=rgba(255,254,253,252) | 255,254,253,252
+22 | \r/6\/ |  |  |  |  |  |  |  |  |  |  |  |  | Float=\Y/23456789\/012345678901 | \Y/23456789\/751949950976
+23 | \r/3\/ |  |  |  |  |  |  |  |  |  |  |  |  | Long=-2147483647 | -2147483647
+24 | \r/7\/ |  |  |  |  |  |  |  |  |  |  |  |  | Number=0 | 0
+25 | \r/7\/ |  |  |  |  |  |  |  |  |  |  |  |  | Number=\Y/234567890123456\/78901 | \Y/234567890123456\/79872
+26 |\g/15\/| 0 | \g/*2*\/ | 0 | \r/7\/ | 0 | \r/7\/ |  |  |  |  |  |  | Number=complex(\Y/234567890123456\/78901,\Y/345678901234567\/89012) | \Y/234567890123456\/79872,\Y/345678901234567\/90528
+27 | \r/3\/ |  |  |  |  |  |  |  |  |  |  |  |  | Number=rgba(255,254,253,252) | 255,254,253,252
+28 | \b/20\/ | \r/3\/ | \b/*14*\/ |  |  |  |  |  |  |  |  |  |  | RGBBitmap=RGBImage("",3,1,14) | 
+29 |\g/15\/| 0 | \g/*3*\/ | 0 | \r/2\/ | 0 | \r/2\/ | 0 | \r/2\/ |  |  |  |  | RGBUInt16=65535,65534,65533 | 65535,65534,65533
+30 | \r/2\/ |  |  |  |  |  |  |  |  |  |  |  |  | Short=-32768 | -32768
+31 |\g/15\/| 0 | \g/*2*\/ | 0 | \r/2\/ | 0 | \r/2\/ |  |  |  |  |  |  | ShortPoint=-32768,32768 | -32768,32767
+32 |\g/15\/| 0 | \g/*4*\/ | 0 | \r/2\/ | 0 | \r/2\/ | 0 | \r/2\/ | 0 | \r/2\/ |  |  | ShortRect=-32768,32768,-32767,32767 | -32768,32767,-32767,32767
+33 | \r/11\/ |  |  |  |  |  |  |  |  |  |  |  |  | SInt64=\Y/-92233720368547\/75807 | \Y/-92233720368547\/75808
+34 | \b/20\/ | \r/4\/ | \b/*1*\/|  |  |  |  |  |  |  |  |  |  | String="S" | S
+35 |  |  |  |  |  |  |  |  |  |  |  |  |  | TagGroup=newtaggroup() | 
+36 | \b/20\/ | \r/4\/ | \b/*1*\/|  |  |  |  |  |  |  |  |  |  | Text="T" | T
+37 | \r/4\/ |  |  |  |  |  |  |  |  |  |  |  |  | UInt16=65535 | 65535
+38 | \r/5\/ |  |  |  |  |  |  |  |  |  |  |  |  | UInt32=4294967295 | 4294967295
+39 | \r/12\/ |  |  |  |  |  |  |  |  |  |  |  |  | UInt64=~~18446744073709551615~~ | ~~9223372036854775808~~
+
+</div>
 
 # Other sources of DM3/4 information
 1. [*Digital Micrograph file format*](http://phyweb.physics.nus.edu.sg/~phybcb/info/dmformat/index.html), by Dr Chris Boothroyd. A must-read.

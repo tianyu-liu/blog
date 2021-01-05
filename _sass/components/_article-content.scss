@@ -99,12 +99,15 @@
   }
   .highlighter-rouge > .highlight, figure.highlight {
     & > pre {
-      padding: map-get($spacers, 3) 0 map-get($spacers, 3) map-get($spacers, 3);
+      // padding: map-get($spacers, 3) 0 map-get($spacers, 3) map-get($spacers, 3);
       margin: 0;
       background-color: $text-background-color;
       border-radius: map-get($base, border-radius);
       & > code {
         display: block;
+        & > table {
+          margin: 0;
+        }
       }
     }
   }

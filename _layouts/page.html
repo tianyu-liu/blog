@@ -268,10 +268,10 @@ layout: base
   function openAside() {
     aside = document.getElementsByTagName("aside")[0]
     aside_width = aside.style.width;
-    aside.style.width = "220px";
+    aside.style.maxWidth = "80%";
   }
   function closeAside() {
-    document.getElementsByTagName("aside")[0].style.width = aside_width;
+    document.getElementsByTagName("aside")[0].style.maxWidth = aside_width;
   }
 </script>
 {%- endif -%}

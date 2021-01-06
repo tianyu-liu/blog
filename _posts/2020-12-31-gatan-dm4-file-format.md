@@ -1,5 +1,5 @@
 ---
-title: Gatan DM4 file format
+title: Gatan .dm3 & .dm4 file formats
 tags: 
 - Digital Micrograph
 ---
@@ -14,13 +14,11 @@ code {
 }
 </style>
 
-Digital Micrograph version: 3.42.3048.0.
-
 # **Image Data Types**
 
 ## All possible **Image Date Types**
 
-**Image Data Type** is a series of encoded numbers for *DM2/3/4* files to determine the carried **Image**'s type. **Image Data Type** is stored at **Tag** `ImageData:DataType` under every **Image** (including the thumbnail) under **Lv. 1** **TagList** `ImageList`. The below *DM* script illustrates all possible **Image Data Type** numbers:
+**Image Data Type** is a series of encoded numbers for *.dm2/3/4* files to determine the carried **Images**' types. **Image Data Type** is stored at **Tag** `ImageData:DataType` of every **Image** (including the thumbnail) which is under **TagList** `ImageList`. The below *DM* script illustrates all possible **Image Data Type** numbers:
 
 <div class="clearfix" markdown="1">
 <div markdown="1" class="left-half">
@@ -112,7 +110,7 @@ number y=1
 imgdoc.ImageDocumentAddImage(BinaryImage("BinaryImage(\"\",1,"+y+")",1,y++))
 imgdoc.ImageDocumentAddImage(ComplexImage("ComplexImage(\"\",16,1,"+y+")",16,1,y++))
 imgdoc.ImageDocumentAddImage(ComplexImage("ComplexImage(\"\",8,1,"+y+")",8,1,y++))
-imgdoc.ImageDocumentAddImage(RealFFT(RealImage("RealImage(\"\",4,1,"+y+")",4,1,y++)))
+imgdoc.ImageDocumentAddImage(RealFFT(RealImage("RealImage(\"\",4,4,4)",4,4,4)))
 imgdoc.ImageDocumentAddImage(IntegerImage("IntegerImage(\"\",1,0,1,"+y+")",1,0,1,y++))
 imgdoc.ImageDocumentAddImage(IntegerImage("IntegerImage(\"\",1,1,1,"+y+")",1,1,1,y++))
 imgdoc.ImageDocumentAddImage(IntegerImage("IntegerImage(\"\",2,0,1,"+y+")",2,0,1,y++))
@@ -121,11 +119,11 @@ imgdoc.ImageDocumentAddImage(IntegerImage("IntegerImage(\"\",4,0,1,"+y+")",4,0,1
 imgdoc.ImageDocumentAddImage(IntegerImage("IntegerImage(\"\",4,1,1,"+y+")",4,1,1,y++))
 imgdoc.ImageDocumentAddImage(IntegerImage("IntegerImage(\"\",8,0,1,"+y+")",8,0,1,y++))
 imgdoc.ImageDocumentAddImage(IntegerImage("IntegerImage(\"\",8,1,1,"+y+")",8,1,1,y++))
-image r4 := RealImage("RealImage(\"\",4,1,"+y+");ConvertToPackedComplex",4,1,y++)
+image r4 := RealImage("RealImage(\"\",4,4,4);ConvertToPackedComplex",4,4,4)
 ConvertToPackedComplex(r4)
 imgdoc.ImageDocumentAddImage(r4)
 imgdoc.ImageDocumentAddImage(RealImage("RealImage(\"\",4,1,"+y+")",4,1,y++))
-image r8 := RealImage("RealImage(\"\",8,1,"+y+");ConvertToPackedComplex",8,1,y++)
+image r8 := RealImage("RealImage(\"\",8,4,4);ConvertToPackedComplex",8,4,4)
 ConvertToPackedComplex(r8)
 imgdoc.ImageDocumentAddImage(r8)
 imgdoc.ImageDocumentAddImage(RealImage("RealImage(\"\",8,1,"+y+")",8,1,y++))
@@ -154,27 +152,27 @@ if(SaveAsDialog("Save the testing multi-images document as .dm4", GetApplication
 
 <div markdown="1" class="dataTable ttmd right-half">
 Type | Pixel | Numeric | Variant | Bit | Image Name
-|---|
+|-|
 14 | scalar | binary | 0 | 8 | BinaryImage("",1,1)
 13 | complex | float | 0 | 64 | ComplexImage("",16,1,2)
 3 | complex | float | 0 | 32 | ComplexImage("",8,1,3)
-3 | complex | float | 0 | 32 | FFT of RealImage("",4,1,4)
-6 | scalar | uint | 0 | 8 | IntegerImage("",1,0,1,5)
-9 | scalar | sint | 0 | 8 | IntegerImage("",1,1,1,6)
-10 | scalar | uint | 0 | 16 | IntegerImage("",2,0,1,7)
-1 | scalar | sint | 0 | 16 | IntegerImage("",2,1,1,8)
-11 | scalar | uint | 0 | 32 | IntegerImage("",4,0,1,9)
-7 | scalar | sint | 0 | 32 | IntegerImage("",4,1,1,10)
-40 | scalar | uint | 0 | 64 | IntegerImage("",8,0,1,11)
-39 | scalar | sint | 0 | 64 | IntegerImage("",8,1,1,12)
-3 | complex | float | 0 | 32 | RealImage("",4,1,13);ConvertToPackedComplex
-2 | scalar | float | 0 | 32 | RealImage("",4,1,14)
-13 | complex | float | 0 | 64 | RealImage("",8,1,15);ConvertToPackedComplex
-12 | scalar | float | 0 | 64 | RealImage("",8,1,16)
-15 | rgb | uint | 0 | 8 | RGBImage("",3,1,17)
-23 | rgba | uint | 3 | 8 | RGBImage("",4,1,18)
-17 | rgb | uint | 0 | 16 | RGBImage("",6,1,19)
-24 | rgba | uint | 0 | 16 | RGBImage("",8,1,20)
+3 | complex | float | 0 | 32 | FFT of RealImage("",4,4,4)
+6 | scalar | uint | 0 | 8 | IntegerImage("",1,0,1,4)
+9 | scalar | sint | 0 | 8 | IntegerImage("",1,1,1,5)
+10 | scalar | uint | 0 | 16 | IntegerImage("",2,0,1,6)
+1 | scalar | sint | 0 | 16 | IntegerImage("",2,1,1,7)
+11 | scalar | uint | 0 | 32 | IntegerImage("",4,0,1,8)
+7 | scalar | sint | 0 | 32 | IntegerImage("",4,1,1,9)
+40 | scalar | uint | 0 | 64 | IntegerImage("",8,0,1,10)
+39 | scalar | sint | 0 | 64 | IntegerImage("",8,1,1,11)
+3 | complex | float | 0 | 32 | RealImage("",4,4,4);ConvertToPackedComplex
+2 | scalar | float | 0 | 32 | RealImage("",4,1,12)
+13 | complex | float | 0 | 64 | RealImage("",8,4,4);ConvertToPackedComplex
+12 | scalar | float | 0 | 64 | RealImage("",8,1,13)
+15 | rgb | uint | 0 | 8 | RGBImage("",3,1,14)
+23 | rgba | uint | 3 | 8 | RGBImage("",4,1,15)
+17 | rgb | uint | 0 | 16 | RGBImage("",6,1,16)
+24 | rgba | uint | 0 | 16 | RGBImage("",8,1,17)
 
 </div>
 
@@ -188,7 +186,7 @@ Because this list is being reported before saving the **Image Document**, there 
 
 </div>
 
-# Tag/Variable Data Types
+# Tag/Scalar Data Types
 
 <div class="clearfix" markdown="1">
 <div class="left-half" markdown="1">
@@ -203,10 +201,13 @@ tg.TagGroupSetTagAsArray("Array=ComplexImage(\"\",16,1,"+y+")",ComplexImage("",1
 tg.TagGroupSetTagAsArray("Array=ComplexImage(\"\",8,1,"+y+")",ComplexImage("",8,1,y++))
 tg.TagGroupSetTagAsArray("Array=IntegerImage(\"\",1,0,1,"+y+")",IntegerImage("",1,0,1,y++))
 tg.TagGroupSetTagAsArray("Array=IntegerImage(\"\",1,1,1,"+y+")",IntegerImage("",1,1,1,y++))
+tg.TagGroupSetTagAsArray("Array=IntegerImage(\"\",2,0,1,"+y+")",IntegerImage("",2,0,1,y++))
+tg.TagGroupSetTagAsArray("Array=IntegerImage(\"\",2,1,1,"+y+")",IntegerImage("",2,1,1,y++))
 tg.TagGroupSetTagAsArray("Array=IntegerImage(\"\",4,0,1,"+y+")",IntegerImage("",4,0,1,y++))
 tg.TagGroupSetTagAsArray("Array=IntegerImage(\"\",4,1,1,"+y+")",IntegerImage("",4,1,1,y++))
 tg.TagGroupSetTagAsArray("Array=IntegerImage(\"\",8,0,1,"+y+")",IntegerImage("",8,0,1,y++))
 tg.TagGroupSetTagAsArray("Array=IntegerImage(\"\",8,1,1,"+y+")",IntegerImage("",8,1,1,y++))
+tg.TagGroupSetTagAsArray("Array=RealImage(\"\",4,1,"+y+")",RealImage("",4,1,y++))
 tg.TagGroupSetTagAsArray("Array=RealImage(\"\",8,1,"+y+")",RealImage("",8,1,y++))
 tg.TagGroupSetTagAsArray("Array=RGBImage(\"\",3,1,"+y+")",RGBImage("",3,1,y++))
 tg.TagGroupSetTagAsArray("Array=RGBImage(\"\",4,1,"+y+")",RGBImage("",4,1,y++))
@@ -270,7 +271,6 @@ for(i=0;i<tg.taggroupcounttags();i++){
 	if (l=="ShortRect=-32768,32768,-32767,32767") {tg.TagGroupGetTagAsshortrect(l,n0,n1,n2,n3); result(n0+","+n1+","+n2+","+n3);}
 	if (l=="SInt64=-9223372036854775807") {tg.TagGroupGetTagAssint64(l,n0); result(format(n0,"%.20g"));}
 	if (l=="String=\"S\"") {tg.TagGroupGetTagAsstring(l,s); result(s);}
-//	if (l=="TagGroup=newtaggroup()") {tg.TagGroupGetTagAstaggroup(l,t); ;}
 	if (l=="Text=\"T\"") {tg.TagGroupGetTagAstext(l,s); result(s);}
 	if (l=="UInt16=65535") {tg.TagGroupGetTagAsuint16(l,n0); result(format(n0,"%.20g"));}
 	if (l=="UInt32=4294967295") {tg.TagGroupGetTagAsuint32(l,n0); result(format(n0,"%.20g"));}
@@ -288,15 +288,18 @@ for(i=0;i<tg.taggroupcounttags();i++){
 \b/20\/ | \g/15\/ | 0 | \g/*2*\/ | 0 | \r/6\/ | 0 | \r/6\/ | \b/*3*\/ |  |  |  |  | Array=ComplexImage("",8,1,3) | 
 \b/20\/ | \r/10\/ | \b/*4*\/ |  |  |  |  |  |  |  |  |  |  | Array=IntegerImage("",1,0,1,4) | 
 \b/20\/ | \r/9\/ | \b/*5*\/ |  |  |  |  |  |  |  |  |  |  | Array=IntegerImage("",1,1,1,5) | 
-\b/20\/ | \r/5\/ | \b/*6*\/ |  |  |  |  |  |  |  |  |  |  | Array=IntegerImage("",4,0,1,6) | 
-\b/20\/ | \r/3\/ | \b/*7*\/ |  |  |  |  |  |  |  |  |  |  | Array=IntegerImage("",4,1,1,7) | 
-\b/20\/ | \r/12\/ | \b/*8*\/ |  |  |  |  |  |  |  |  |  |  | Array=IntegerImage("",8,0,1,8) | 
-\b/20\/ | \r/11\/ | \b/*9*\/ |  |  |  |  |  |  |  |  |  |  | Array=IntegerImage("",8,1,1,9) | 
-\b/20\/ | \r/7\/ | \b/*10*\/ |  |  |  |  |  |  |  |  |  |  | Array=RealImage("",8,1,10) | 
-\b/20\/ | \g/15\/ | 3 | \g/*3*\/ | 0 | \r/10\/ | 1 | \r/10\/ | 2 | \r/10\/ | \b/*11*\/ |  |  | Array=RGBImage("",3,1,11) | 
-\b/20\/ | \r/3\/ | \b/*12*\/ |  |  |  |  |  |  |  |  |  |  | Array=RGBImage("",4,1,12) | 
-\b/20\/ | \g/15\/ | 3 | \g/*3*\/ | 0 | \r/4\/ | 1 | \r/4\/ | 2 | \r/4\/ | \b/*13*\/ |  |  | Array=RGBImage("",6,1,13) | 
-\b/20\/ | \g/15\/ | 4 | \g/*4*\/ | 0 | \r/4\/ | 1 | \r/4\/ | 2 | \r/4\/ | 3 | \r/4\/ | \b/*14*\/ | Array=RGBImage("",8,1,14) | 
+\b/20\/ | \r/4\/ | \b/*6*\/ |  |  |  |  |  |  |  |  |  |  | Array=IntegerImage("",2,0,1,6) | 
+\b/20\/ | \r/2\/ | \b/*7*\/ |  |  |  |  |  |  |  |  |  |  | Array=IntegerImage("",2,1,1,7) | 
+\b/20\/ | \r/5\/ | \b/*8*\/ |  |  |  |  |  |  |  |  |  |  | Array=IntegerImage("",4,0,1,8) | 
+\b/20\/ | \r/3\/ | \b/*9*\/ |  |  |  |  |  |  |  |  |  |  | Array=IntegerImage("",4,1,1,9) | 
+\b/20\/ | \r/12\/ | \b/*10*\/ |  |  |  |  |  |  |  |  |  |  | Array=IntegerImage("",8,0,1,10) | 
+\b/20\/ | \r/11\/ | \b/*11*\/ |  |  |  |  |  |  |  |  |  |  | Array=IntegerImage("",8,1,1,11) | 
+\b/20\/ | \r/6\/ | \b/*12*\/ |  |  |  |  |  |  |  |  |  |  | Array=RealImage("",4,1,12) | 
+\b/20\/ | \r/7\/ | \b/*13*\/ |  |  |  |  |  |  |  |  |  |  | Array=RealImage("",8,1,13) | 
+\b/20\/ | \g/15\/ | 3 | \g/*3*\/ | 0 | \r/10\/ | 1 | \r/10\/ | 2 | \r/10\/ | \b/*14*\/ |  |  | Array=RGBImage("",3,1,14) | 
+\b/20\/ | \r/3\/ | \b/*15*\/ |  |  |  |  |  |  |  |  |  |  | Array=RGBImage("",4,1,15) | 
+\b/20\/ | \g/15\/ | 3 | \g/*3*\/ | 0 | \r/4\/ | 1 | \r/4\/ | 2 | \r/4\/ | \b/*16*\/ |  |  | Array=RGBImage("",6,1,16) | 
+\b/20\/ | \g/15\/ | 4 | \g/*4*\/ | 0 | \r/4\/ | 1 | \r/4\/ | 2 | \r/4\/ | 3 | \r/4\/ | \b/*17*\/ | Array=RGBImage("",8,1,17) | 
 \r/8\/ |  |  |  |  |  |  |  |  |  |  |  |  | Boolean=1 | 1
 \r/7\/ |  |  |  |  |  |  |  |  |  |  |  |  | Double=234567890123456~~78901~~ | 234567890123456~~79872~~
 \g/15\/ | 0 | \g/*2*\/ | 0 | \r/7\/ | 0 | \r/7\/ |  |  |  |  |  |  | DoubleComplex=complex(234567890123456~~78901~~,345678901234567~~89012~~) | 234567890123456~~79872~~,345678901234567~~90528~~
@@ -323,12 +326,36 @@ for(i=0;i<tg.taggroupcounttags();i++){
 </div>
 </div>
 
-# Other sources of DM3/4 information
-There are quite a few other sources worth a read [^1]  [^2]  [^3]  [^4]  [^5].
+# *GMS* Versions
+Tested *GMS* versions:
+1. *GMS 1.4.3* (*DM Demo 3.9.3*). File saving is not supported as a Demo.
+1. *GMS 2.0.1* (2.01.697.0).
+1. *GMS 3.4.2* (3.42.3048.0).
 
-[^1]: [*Digital Micrograph file format*](http://phyweb.physics.nus.edu.sg/~phybcb/info/dmformat/index.html), by Dr Chris Boothroyd. A must-read.
-[^2]: [An Igor Pro script](https://www.wavemetrics.com/comment/11439#comment-11439) to read DM3 file.
-[^3]: [`EMAN::DM4IO` Class Reference](https://blake.grid.bcm.edu/eman2/doxygen_html/classEMAN_1_1DM4IO.html), DM4 I/O for *EMAN2*, written in C++.
-[^4]: [`DM3_Reader` plugin](https://imagej.nih.gov/ij/plugins/DM3_Reader.html) for *ImageJ*.
-[^5]: [`ncempy.io.dm`](https://openncem.readthedocs.io/en/latest/ncempy.io.html#module-ncempy.io.dm), the DM3/4 I/O module of *openNCEM*'s python package.
+The output of these tested versions are mostly the same, except for:
+- Only this *GMS 3* support `TagGroupSetTagAsSInt64()`/`TagGroupSetTagAsUInt64()`, although these *GMS 1* & *2* both support **8-byte Integer Images** as well. 
+- This *GMS 1* also has trouble with `TagGroupSetTagAsArray()` combined with **8-byte Integer Images**. 
+- The **Image Data Types 27/28 Complex 32-/64-bit** do not exist on this *GMS 1*. This leads to the next two differences.
+- On this *GMS 1*, the **64-bit scalar signed/unsigned integer Image Data Types** are numbered as **37/38**, while as **39/40** on these *GMS 2* & *GMS 3*, respectively.
+- On this *GMS 1*, `RealImage("",8,4,4)` then `ConvertToPackedComplex()` results a **Type 3 Complex Image**. Maybe **Image Data Types 27/28 Complex** are related to the **Packed Complex**.
+- On this *GMS 3*, the `result()` of the list of images in a `ImageDocument` is in reverse order, while the `ImageList` `TagGroup` in the saved file is identical to that of those other two versions.
+
+No other **Image/Tag/Scalar Data Type** difference was found. There are also some patterns regarding **String**/**Text** **Tags** in *.dm3/4* files:
+
+- The **Tag/Scalar Type 18** known as **String** cannot be found/created in any *.dm3/4* image files (using a self-written script outside *DM* to read the whole binary files) generated throughout these tests. Maybe it no long exists in *.dm3/4*.
+- The same also appiles to **Tag/Scalar Type 9** known as **int8**/**char**. No instance of **char** usage was found/created; only **int8**.
+- All **String**/**Text** **Tags** are stored as **uint16 Arrays**. 
+- *DM* seems to always interpret **int8**/**uint16 Array Tags** as **Text** (in `TagGroupOpenBrowserWindow()`).
+- Except for `ImageData:Data` **int8**/**unint16 Array Tags** in the `ImageList`, which are absolutely **Images**.
+- **RGB Images**, like `CLUT`, which are not in the `ImageList` and supposed to have **uint16 scalars**, are marked with **int16 scalars** instead. Maybe it is to distinguish any **Image** from **Text** in **Tags**. They will be extracted as **uint16** by *DM* according to their **Tag Paths**, I guess.
+
+The scripts/outputs demonstrated here are for/from *GMS 3.4.2*.
+
+# Other sources of *\.dm3/4* information
+There are quite a few other sources worth a read [^1]  [^2]  [^3]  [^4].
+
+[^1]: [*Digital Micrograph file format*](http://phyweb.physics.nus.edu.sg/~phybcb/info/dmformat/index.html), by Dr Chris Boothroyd. A must-read. I learned the structure of *.dm3/4* files from here.
+[^2]: [`EMAN::DM4IO` Class Reference](https://blake.grid.bcm.edu/eman2/doxygen_html/classEMAN_1_1DM4IO.html), *.dm4* I/O for *EMAN2*, written in C++.
+[^3]: [`DM3_Reader` plugin](https://imagej.nih.gov/ij/plugins/DM3_Reader.html) for *ImageJ*.
+[^4]: [`ncempy.io.dm`](https://openncem.readthedocs.io/en/latest/ncempy.io.html#module-ncempy.io.dm), the *.dm3/4* I/O module of *openNCEM*'s python package.
 
